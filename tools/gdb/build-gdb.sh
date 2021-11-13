@@ -7,7 +7,7 @@ shell -e
 
 enable_static_libs=true	# true
 enable_cross_compile=false   # false/true
-cross_prefix="arm-himix200-linux-"  # arm-himix200-linux-   arm-hisiv300-linux-
+cross_prefix="arm-fsl-linux-gnueabi-"  # arm-himix200-linux-   arm-hisiv300-linux-
 target_ver="gdb-7.10"
 output_path="$(cd `dirname $0`; pwd)/$target_ver/build"
 ncurses_path="$(cd `dirname $0`; pwd)/ncurses-5.9/build"
