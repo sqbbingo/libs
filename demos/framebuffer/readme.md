@@ -6,7 +6,9 @@
     显示二进制格式的图片
 #jpeg_show.c
     显示jpeg图片
-
+#animation
+    图片显示效果算法--测试运行过程中有错误
+    
 #ps
     get_screeninfo.c 和pic_show.c显示的图片需要使用软件image2lcd转换
     使用这个工具需要注意的几点： 

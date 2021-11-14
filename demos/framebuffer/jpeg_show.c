@@ -2,7 +2,7 @@
 * @Author: bingo
 * @Date:   2021-11-13 14:35:45
 * @Last Modified by:   bingo
-* @Last Modified time: 2021-11-14 00:07:51
+* @Last Modified time: 2021-11-14 13:27:10
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,6 +22,7 @@
 #include "jpeglib.h"
 #include <linux/fb.h>
 #include <sys/ioctl.h>
+#include <sys/time.h>
 
 struct image_info
 {
@@ -101,6 +102,13 @@ int Open(const char *filename, int mode)
     return fd;
 }
 
+void runing_time(void)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    printf("%ld.%ld\n", tv.tv_sec, tv.tv_usec );
+}
+
 int main(int argc, char const *argv[])
 {
     if (argc != 2)
@@ -109,6 +117,7 @@ int main(int argc, char const *argv[])
         exit(1);
     }
 
+    runing_time();
     //读取图片文件属性信息
     //根据其大小分配内存缓冲区jpg_buffer
     struct stat file_info;
@@ -149,6 +158,7 @@ int main(int argc, char const *argv[])
     imageinfo.height = cinfo.output_height;
     imageinfo.pixel_size = cinfo.output_components;
 
+    printf("imageinfo width=%d height=%d pixel_size=%d\n", imageinfo.width, imageinfo.height, imageinfo.pixel_size );
     int row_stride = imageinfo.width * imageinfo.pixel_size;
 
     //根据图片的尺寸大小，分配一块相应的内存bmp_buffer
@@ -171,6 +181,7 @@ int main(int argc, char const *argv[])
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
     free(jpg_buffer);
+    runing_time();
 
     //准备lcd屏幕
     int lcd = Open("/dev/fb0", O_RDWR | O_EXCL);
@@ -186,6 +197,7 @@ int main(int argc, char const *argv[])
               PROT_READ | PROT_WRITE, MAP_SHARED, lcd, 0);
     //将bmp_buffer中的RGB图像数据，写入FRAMEBUFFER中
     write_lcd(bmp_buffer, &imageinfo, FB, &vinfo);
+    runing_time();
 
     return 0;
 }
