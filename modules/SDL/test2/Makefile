@@ -1,6 +1,5 @@
-EXE = hiding_picture
-OBJ = $(EXE).o
-SRC = $(EXE).c
+SRC = $(wildcard *.c)
+ELF = $(SRC:%.c=%)
 
 CROSS_PREFIX ?=
 
@@ -15,11 +14,13 @@ LIBS += -lts
 
 LDFLAGS += -Lsdl/lib
 LDFLAGS +=-Lts/lib
-LDFLAGS += -g -Wall
+LDFLAGS += -g -Wall -pthread
 
-$(EXE):$(SRC)
+all:$(ELF)
+
+$(ELF):%:%.c
 	$(CC) $^ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBS)
 
 .PHONY:clean
 clean:
-	-$(RM) $(EXE) $(OBJ)
+	-$(RM) $(ELF) 

@@ -19,3 +19,12 @@
         echo "ac_cv_func_malloc_0_nonnull=yes" > arm-Linux.cache
     5，执行./configure --host=arm-Linux --cache-file=arm-Linux.cache --prefix=/usr/local/tslib  --host 指明当前系统所使用的交叉编译工具的前缀，根据具体情况而变。 --cache-file 指明运行 configure 脚本时的缓存文件。 --prefix 指明 TSLIB 的安装路径，根据具体情况而变。
     接下来执行 make 和 make instal
+    6，编译错误：undefined reference to `rpl_malloc'
+    解决方法：执行# ./configure  --host=mipsel-linux  --prefix=/TSLIB后，在config.h中将“#define malloc  rpl_malloc malloc”注释掉，编译通过
+    7，编译错误：error: call to ‘__open_missing_mode’ declared with attribute error: open with O_CREAT
+    解决方法：
+    sudo vim /home/loongson/workspace/tslib/tests/ts_calibrate.c +227将cal_fd = open (calfile, O_CREAT | O_RDWR);改为
+    cal_fd = open (calfile, O_CREAT | O_RDWR,0666);
+    229行
+    将cal_fd = open ("/etc/pointercal", O_CREAT | O_RDWR);
+     = open ("/etc/pointercal", O_CREAT | O_RDWR,0666);
