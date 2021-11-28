@@ -1,11 +1,11 @@
 #!/bin/sh
-enable_cross_compile="disable"	# enable/disable
+enable_cross_compile="enable"	# enable/disable
 
 enable_shared_libs="disable"	# enable/disable
-cross_prefix="arm-hisiv300-linux-"
+cross_prefix="arm-fsl-linux-gnueabi-"
 output_path="./build"
 enable_x264="disable"	# enable/disable
-ffmpeg_ver="ffmpeg-3.3"
+ffmpeg_ver="ffmpeg-0.10.1"
 
 # Fetch Sources
 if [ ! -d $ffmpeg_ver ]; then
@@ -45,7 +45,7 @@ pri_cflags="$cross_pri_cflags
 			--enable-muxer=avi --enable-muxer=mp4 --enable-muxer=pcm_alaw --enable-muxer=pcm_mulaw --enable-muxer=matroska
 			--enable-parser=h264 --enable-parser=hevc
 			--enable-small --disable-debug --disable-doc
-			--disable-avdevice --disable-swscale --disable-postproc"
+			--enable-avdevice --enable-avcodec --enable-avformat --enable-swresample --enable-swscale --disable-postproc --enable-avfilter"
 
 echo "sh configure $pri_cflags"
 cd $ffmpeg_ver && sh configure $pri_cflags

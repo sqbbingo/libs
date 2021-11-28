@@ -1,8 +1,8 @@
 #!/bin/sh
 
 iperf_ver="iperf-2.0.4-RELEASE"
-enable_cross_compile="disable"	# enable/disable
-cross_prefix="arm-hisiv500-linux-"
+enable_cross_compile="enable"	# enable/disable
+cross_prefix="arm-fsl-linux-gnueabi-"
 output_path="$(pwd)/$iperf_ver/build"
 shell -e
 
