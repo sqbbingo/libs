@@ -118,6 +118,9 @@ int utimer_init(usr_timer_t *timer)
         struct hrtimer *t = (struct hrtimer *)&timer->timer;
         hrtimer_init(t, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
         t->function = utimer_high_cb;
+		if (0 == hrtimer_is_hres_active(t)) {
+			printk("%s - Warnning: Cannot support NOHZ_MODE_HIGHRES mode.\n", __FUNCTION__);
+		}
     }
     
     return 0;
@@ -161,7 +164,8 @@ static int utimer_usleep_handle(void *param)
 int utimer_usleep(int us)
 {
 	usr_timer_t utimer;
-	
+
+	if (us <= 0) return 0;
     utimer.type = USER_TIMER_HIGH;
     utimer.function = utimer_usleep_handle;
     utimer.data = (void *)&utimer;
@@ -173,6 +177,7 @@ int utimer_usleep(int us)
 	while (!utimer.timer_expire) {
 		schedule();
 	}
+	utimer_destory(&utimer);
 	
 	return 0;
 }
